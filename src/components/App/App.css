@@ -19,6 +19,11 @@ Container
 
 .container {
   padding: 20px;
+  height: 90%;
+  width: 90%;
+}
+.map{
+  background-color: #00acb0;
 }
 
 /* --------------------------------------------------------------------------------

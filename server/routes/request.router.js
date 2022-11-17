@@ -6,15 +6,30 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 /**
  * GET route template
  */
-router.get('/',rejectUnauthenticated, (req, res) => {
+router.get('/', (req, res) => {
   // GET route code here
+  const sqlText = `
+  SELECT * 
+  FROM "request";
+  `;
+  pool.query(sqlText)
+   .then((result) =>{
+    console.log('result is:',result.rows)
+    res.send(result.rows)
+   })
+   .catch((error) =>{
+    console.log('error fetching items', error)
+    res.sendStatus(500)
+   })
 });
+
 
 /**
  * POST route template
  */
 router.post('/',rejectUnauthenticated,(req, res) => {
   // POST route code here
+
 });
 
 

@@ -28,8 +28,8 @@ function Nav() {
               Home
             </Link>
 
-            <Link className="navLink" to="/info">
-              Info Page
+            <Link className="navLink" to="/request">
+              Schedule Appointment
             </Link>
 
             <LogOutButton className="navLink" />
