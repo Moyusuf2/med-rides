@@ -6,6 +6,16 @@ import { FaLocationArrow, FaTimes, FaSkullCrossbones } from 'react-icons/fa'
 import { useJsApiLoader, GoogleMap, Marker, Autocomplete, DirectionsRenderer, } from '@react-google-maps/api'
 import { useRef, useState } from 'react'
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import CssBaseline from '@mui/material/CssBaseline';
+import { useHistory } from 'react-router-dom';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { useDispatch } from 'react-redux';
 const libraries = ['places']
 
@@ -16,6 +26,7 @@ const libraries = ['places']
 // or even care what the redux state is
 
 function InfoPage() {
+  const history = useHistory()
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
   const center = { lat: 44.977540, lng: -93.263643 }
@@ -41,12 +52,15 @@ function InfoPage() {
     car
   }
 
-  console.log('request form', requestForm)
-  // dispatch({
-  //   type: "SET_REQUEST",
-  //   payload: requestForm
+  function submitForm(){
+    console.log('request form', requestForm)
+  dispatch({
+    type: "ADD_REQUEST",
+    payload: requestForm
 
-  // })
+  })
+  history.push('/user')
+  }
 
 
 
@@ -109,7 +123,7 @@ function InfoPage() {
 
   
   return (
-    <div className="container">
+    <CssBaseline >
       <p>{pickUp}</p>
       <h2>New Request</h2>
       <Box
@@ -146,14 +160,15 @@ function InfoPage() {
 
       <div className='formInput'>
         <div className='origin'>
-          {/* <Autocomplete
-            onChange={handlePickUp}> */}
+           <Autocomplete
+           value={pickUp}
+           onChange={handlePickUp}
+            >
           <input type='text' placeholder='Origin'
-            value={pickUp}
-            onChange={handlePickUp}
+          
 
             ref={originRef} />
-          {/* </Autocomplete> */}
+          </Autocomplete>
         </div>
         <FaLocationArrow
           aria-label='center'
@@ -198,9 +213,12 @@ function InfoPage() {
         <button onClick={(event) => setCar('Gurney Van')}>Gurney Van</button>
 
       </div>
-      <button>submit</button>
+      <br />
+      <br />
 
-    </div>
+      <button onClick={submitForm}>submit</button>
+
+    </CssBaseline>
   );
 }
 

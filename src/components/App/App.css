@@ -114,3 +114,38 @@ input {
   margin: 5px;
   margin-bottom: 10px;
 }
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+/* CSS */
+.button-24 {
+  background: #42ff4b;
+  color: #1cc49d;
+  background-color: #1b2f31;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3em;
+  width: 8em;
+  font-weight: 600;
+  margin: 5px;
+}
+
+.button-24:hover,
+.button-24:active {
+  background-color: initial;
+  background-position: 0 0;
+  color: #030303;
+}
+
+.button-24:active {
+  opacity: .5;
+}

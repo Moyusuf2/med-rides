@@ -19,6 +19,8 @@ import ApptPage from '../ApptPage/ApptPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import AdminPage from '../AdminPage/AdminPage';
+import PendingPage from '../PendingPage/PendingPage';
 
 import './App.css';
 
@@ -57,7 +59,11 @@ function App() {
             exact
             path="/user"
           >
+            {user.admin_status === 1 ?
+            <AdminPage />
+            :
             <UserPage />
+            }     
           </ProtectedRoute>
 
           <ProtectedRoute
@@ -66,6 +72,14 @@ function App() {
             path="/request"
           >
             <ApptPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows ApptPage else shows LoginPage
+            exact
+            path="/pending"
+          >
+            <PendingPage />
           </ProtectedRoute>
 
           <Route
@@ -109,6 +123,7 @@ function App() {
               <LandingPage />
             }
           </Route>
+          
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>

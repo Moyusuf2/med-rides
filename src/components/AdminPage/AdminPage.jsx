@@ -1,14 +1,12 @@
 import React from 'react';
 import LogOutButton from '../LogOutButton/LogOutButton';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import './AdminPage.css';
 
-import './UserPage.css';
-
-
-
-function UserPage() {
+function AdminPage() {
   // this component doesn't do much to start, just renders some user reducer info to the DOM
   const user = useSelector((store) => store.user);
   const appt = useSelector(store => store.apptRequest)
@@ -19,22 +17,30 @@ function UserPage() {
   }
 
   useEffect(() => {
-    dispatch({ type: 'FETCH_USER_REQUESTS', payload: user.id });
+    dispatch({ type: 'FETCH_ALL_REQUESTS' });
   }, []);
 
-
   console.log('load appt', appt)
+
+
+const deleteRequest = () =>{
+  console.log('in delete')
+
+    
+}
   return (
     <div className="container">
-      <h2>Welcome, {user.username}!</h2>
+        <h2>WELCOME TO ADMIN PAGE</h2>
+      {/* <h2>Welcome, {user.username}!</h2> */}
       <p>Your ID is: {user.id}</p>
       <h2>upcoming appointments</h2>
       <section>
         {appt.map(appointment => {
           return (
-            <table className='styled-table '>
+            <table key= {appointment.id} className='styled-table '>
               <thead>
                 <tr>
+                  <th scope="col">user</th>
                   <th scope="col">Date/Time</th>
                   <th scope="col">Pickup Location</th>
                   <th scope="col">Destination</th>
@@ -45,21 +51,26 @@ function UserPage() {
               </thead>
               <tbody>
                 <tr>
+                  <td scope="row">{appointment.user_id}</td>
                   <td scope="row">{appointment.date_time}</td>
                   <td>{appointment.pickup_location}</td>
                   <td scope="row">{appointment.destination}</td>
                   <td>{appointment.car_type}</td>
                   <td>{appointment.request_status}</td>
-
+                  <button className='button-24' onClick={() =>{
+                    dispatch({
+                      type: 'DELETE_REQUEST',
+                      payload: appointment
+                    })
+                  }}>Delete</button>
+                  <button className='button-24' onClick={() =>{
+                    dispatch({
+                      type: 'APPROVE_REQUEST',
+                      payload: appointment
+                    })
+                  }}>Approve</button>
                   <td>
-                    <div class="dropdown">
-                      <button onclick="myFunction()" class="dropbtn">Change Status</button>
-                      <div id="myDropdown" class="dropdown-content">
-                        <a href="#">Link 1</a>
-                        <a href="#">Link 2</a>
-                        <a href="#">Link 3</a>
-                      </div>
-                    </div>
+                    
                   </td>
                 </tr>
               </tbody>
@@ -69,7 +80,6 @@ function UserPage() {
           );
         })}
       </section>
-
 
       <button onClick={newAppt}>new request</button>
       <br />
@@ -81,4 +91,4 @@ function UserPage() {
 }
 
 // this allows us to use <App /> in index.js
-export default UserPage;
+export default AdminPage;
