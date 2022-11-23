@@ -11,12 +11,14 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { useHistory } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button'
+// import Button from '@mui/material/Button'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useDispatch } from 'react-redux';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 const libraries = ['places']
 
 
@@ -26,9 +28,10 @@ const libraries = ['places']
 // or even care what the redux state is
 
 function InfoPage() {
+  // const [displayCar, setDisplayCar] = useState(true);
   const history = useHistory()
   const dispatch = useDispatch();
-  const user = useSelector((store) => store.user);
+  // const user = useSelector((store) => store.user);
   const center = { lat: 44.977540, lng: -93.263643 }
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -44,22 +47,49 @@ function InfoPage() {
   const [dateTime, setDateTime] = useState('');
   const [car, setCar] = useState('');
 
+  async function calculateRoute() {
+    if (originRef.current.value === '' || destinationRef.current.value === '') {
+      return
+    }
+    // eslint-disable-next-line no-undef
+    const directionsService = new google.maps.DirectionsService()
+    const results = await directionsService.route({
+      origin: originRef.current.value,
+      destination: destinationRef.current.value,
+      // eslint-disable-next-line no-undef
+      travelMode: google.maps.TravelMode.DRIVING,
+    })
+
+
+    setDirectionsResponse(results)
+    setDistance(results.routes[0].legs[0].distance.text)
+    setDuration(results.routes[0].legs[0].duration.text)
+  }
+
 
   const requestForm = {
     pickUp,
     dropOff,
     dateTime,
-    car
+    car,
+    distance,
+    duration,
+    directionsResponse,
+    map,
+    setMap
+
   }
 
-  function submitForm(){
+  function submitForm() {
     console.log('request form', requestForm)
-  dispatch({
-    type: "ADD_REQUEST",
-    payload: requestForm
 
-  })
-  history.push('/user')
+    calculateRoute();
+    dispatch({
+
+      type: "SET_FORM",
+      payload: requestForm
+    })
+    history.push('/submit')
   }
 
 
@@ -96,22 +126,6 @@ function InfoPage() {
     setDateTime(evt.target.value);
     console.log('handle time and date', dateTime)
   }
-  async function calculateRoute() {
-    if (originRef.current.value === '' || destinationRef.current.value === '') {
-      return
-    }
-    // eslint-disable-next-line no-undef
-    const directionsService = new google.maps.DirectionsService()
-    const results = await directionsService.route({
-      origin: originRef.current.value,
-      destination: destinationRef.current.value,
-      // eslint-disable-next-line no-undef
-      travelMode: google.maps.TravelMode.DRIVING,
-    })
-    setDirectionsResponse(results)
-    setDistance(results.routes[0].legs[0].distance.text)
-    setDuration(results.routes[0].legs[0].duration.text)
-  }
 
   function clearRoute() {
     setDirectionsResponse(null)
@@ -121,10 +135,9 @@ function InfoPage() {
     destinationRef.current.value = ''
   }
 
-  
+
   return (
-    <CssBaseline >
-      <p>{pickUp}</p>
+    <div className='container'>
       <h2>New Request</h2>
       <Box
         sx={{
@@ -139,7 +152,7 @@ function InfoPage() {
           className="map"
           center={center}
           defaultZoom={15}
-          mapContainerStyle={{ width: '90%', height: '40%',display:'flex'}}
+          mapContainerStyle={{ width: '90%', height: '40%', display: 'flex' }}
           options={{
             zoomControl: false,
             streetViewControl: false,
@@ -160,15 +173,14 @@ function InfoPage() {
 
       <div className='formInput'>
         <div className='origin'>
-           <Autocomplete
-           value={pickUp}
-           onChange={handlePickUp}
-            >
-          <input type='text' placeholder='Origin'
-          
+          {/* <Autocomplete
+          > */}
+            <input type='text' placeholder='Origin'
+              value={pickUp}
+              onChange={handlePickUp}
 
-            ref={originRef} />
-          </Autocomplete>
+              ref={originRef} />
+          {/* </Autocomplete> */}
         </div>
         <FaLocationArrow
           aria-label='center'
@@ -177,17 +189,20 @@ function InfoPage() {
             map.setZoom(15)
           }} />
         <div className='destination'>
-          {/* <Autocomplete> */}
-          <input
-            type='text'
-            placeholder='Destination'
+          {/* <Autocomplete
             onChange={handleDropOff}
             value={dropOff}
-            ref={destinationRef}
-          />
+          > */}
+            <input
+              onChange={handleDropOff}
+              value={dropOff}
+              type='text'
+              placeholder='Destination'
+              ref={destinationRef}
+            />
           {/* </Autocomplete> */}
         </div>
-        
+
         <div>
           <input type="datetime-local"
             onChange={handleDateTime}
@@ -196,29 +211,63 @@ function InfoPage() {
         </div>
 
         <div>
-          <button type='submit' onClick={calculateRoute}>
+          {/* <Button type='submit' onClick={calculateRoute}>
             Calculate Route
-          </button>
+          </Button> */}
 
-          <FaTimes onClick={clearRoute} placeholder="clear">Clear</FaTimes>
+          <Button onClick={clearRoute} placeholder="clear">Clear inputs</Button>
         </div>
       </div>
       <div className='calculation'>
-        <h2>Distance: {distance} </h2>
-        <h2>Duration: {duration} </h2>
+        {/* <h2>Distance: {distance} </h2>
+        <h2>Duration: {duration} </h2> */}
       </div>
-      <div>
-        <button onClick={(event) => setCar('Sedan')}>Sedan</button>
+      <div className='carsInfo' class="d-flex align-items-stretch">
+        <Card style={{ width: '18rem' }}>
+          <Card.Img variant="top" src="images/Minivan.jpeg" />
+          <Card.Body>
+            <Card.Title>Card Title</Card.Title>
+            <Card.Text>
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </Card.Text>
+            <Button variant="primary" onClick={(event) => setCar('Minivan')}>Minivan</Button>
+          </Card.Body>
+        </Card>
+        <Card style={{ width: '18rem' }}>
+          <Card.Img variant="top" src="images/gurley_van.jpeg" />
+          <Card.Body>
+            <Card.Title>Card Title</Card.Title>
+            <Card.Text>
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </Card.Text>
+            <Button variant="primary" onClick={(event) => setCar('Gurney Van')}>Gurney Van</Button>
+          </Card.Body>
+        </Card>
+        <Card style={{ width: '18rem' }}>
+          <Card.Img variant="top" src="images/newSedan.jpeg" />
+          <Card.Body>
+            <Card.Title>Card Title</Card.Title>
+            <Card.Text>
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </Card.Text>
+            <Button variant="primary" onClick={(event) => setCar('Sedan')}>Sedan</Button>
+          </Card.Body>
+        </Card>
+
+        {/* <button onClick={(event) => setCar('Sedan')}>Sedan</button>
         <button onClick={(event) => setCar('Minivan')}>Minivan</button>
-        <button onClick={(event) => setCar('Gurney Van')}>Gurney Van</button>
+        <button onClick={(event) => setCar('Gurney Van')}>Gurney Van</button> */}
 
       </div>
       <br />
       <br />
 
-      <button onClick={submitForm}>submit</button>
+      <Button onClick={submitForm}>Review Request</Button>
 
-    </CssBaseline>
+    </div>
   );
 }
 

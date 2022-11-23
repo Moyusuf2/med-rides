@@ -1,0 +1,10 @@
+#container{
+display:flex;
+background-color: gray;
+
+
+}
+
+.carsInfo{
+    display: flexbox;
+}

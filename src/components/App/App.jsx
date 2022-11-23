@@ -21,6 +21,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import AdminPage from '../AdminPage/AdminPage';
 import PendingPage from '../PendingPage/PendingPage';
+import SubmitPage from '../SubmitPage/SubmitPage';
 
 import './App.css';
 
@@ -79,7 +80,19 @@ function App() {
             exact
             path="/pending"
           >
+            {user.admin_status === 1 ?
             <PendingPage />
+            :
+            <UserPage />
+            }
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows ApptPage else shows LoginPage
+            exact
+            path="/submit"
+          >
+            <SubmitPage />
           </ProtectedRoute>
 
           <Route

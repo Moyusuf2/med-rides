@@ -63,12 +63,6 @@ const deleteRequest = () =>{
                       payload: appointment
                     })
                   }}>Delete</button>
-                  <button className='button-24' onClick={() =>{
-                    dispatch({
-                      type: 'APPROVE_REQUEST',
-                      payload: appointment
-                    })
-                  }}>Approve</button>
                   <td>
                     
                   </td>

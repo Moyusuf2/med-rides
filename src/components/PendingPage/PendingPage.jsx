@@ -12,23 +12,6 @@ function PendingPage(){
     dispatch({ 
         type: 'FETCH_UNAPPROVED_REQUESTS'})
   }, []);
-
-  const denyRequest = () =>{
-    console.log('deny request/put')
-
-    dispatch({
-        type:'DENY_REQUEST'
-    })
-  }
-
-  const removeRequest = () =>{
-    console.log('removing requests/delete')
-    
-    dispatch({
-        type: 'REMOVE_REQUEST',
-        payload: pending
-    })
-  }
     return(
         <>
         <h2>Unapproved Requests</h2>

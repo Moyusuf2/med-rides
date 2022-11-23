@@ -18,9 +18,9 @@ function* addRequest(action){
         console.error('in addItem SAGA error:', err);
     }
 }
-    function* fetchRequests(action){
+    function* fetchRequests(){
         console.log('fetching requests')
-        // if(action.payload !== 'true'){
+        
         try{
             const requests = yield axios.get('/api/request');
             console.log('request.data',requests.data);
@@ -30,27 +30,13 @@ function* addRequest(action){
                 payload: requests.data
             })
     
-        } catch (err){
+        } 
+        catch (err){
             //on error
             console.error('in fetch request SAGA error:', err);
         };
     }
-    // else{
-    //     try{
-    //         const requests = yield axios.get('/api/request/unapproved');
-    //         console.log('request.data',requests.data);
-    //         //send to redux
-    //         yield put({
-    //             type: 'SET_REQUESTS',
-    //             payload: requests.data
-    //         })
-    
-    //     } catch (err){
-    //         //on error
-    //         console.error('in fetch request SAGA error:', err);
-    //     };
-// }   
-    // }
+
 
     function* fetchUserRequest(action){
         console.log('fetching user\'s request',action.payload)
@@ -71,7 +57,7 @@ function* addRequest(action){
 function* fetchUnapproved(){
     console.log('fetching unapproved appointments');
     try{
-        const unapproved = yield axios.get(`/api/request/fetchunapproved`);
+        const unapproved = yield axios.get(`/api/request/unapproved`);
         console.log('here\'s the unapproved appts:',unapproved);
 
         yield put({
@@ -91,7 +77,7 @@ function* approveRequest(action){
         console.log('appointment approved', approveRequest)
 
         yield put({
-            type: 'FETCH_ALL_REQUESTS',
+            type: 'FETCH_UNAPPROVED_REQUESTS',
         });
     }
     catch (error){

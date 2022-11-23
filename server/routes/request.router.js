@@ -8,17 +8,21 @@ const { Pool } = require('@mui/icons-material');
  * GET route template
  */
 router.get('/',rejectUnauthenticated, (req, res) => {
-  // GET route code here
-  // const sqlText = `
-  // SELECT *
-  // FROM "request"
-  // WHERE "request_status"= 'APPROVED';
-  // `;
-  const sqlText = `
-  SELECT *
-  FROM "request"
-     ORDER BY "request_status" ASC
-  `
+ 
+//   const sqlText = `
+   
+//  SELECT *
+//  FROM "request"
+//  WHERE "request_status" = 'APPROVED'
+//   ORDER BY "date_time" ASC;
+//   `
+
+const sqlText = `
+SELECT *
+FROM "request"
+WHERE "request".request_status = 'APPROVED'
+ORDER BY "date_time" ASC; 
+`
   pool.query(sqlText)
    .then((result) =>{
     // console.log('all result is:',result.rows)
@@ -30,26 +34,9 @@ router.get('/',rejectUnauthenticated, (req, res) => {
    })
 });
 
-router.get('/:id',rejectUnauthenticated, (req, res) => {
+router.get('/unapproved',rejectUnauthenticated, (req, res) => {
   // GET route code here
-  const sqlText = `
-  SELECT*
-  FROM "request"
-  WHERE "user_id" = $1
-  `;
-  pool.query(sqlText,[req.user.id])
-   .then((result) =>{
-    // console.log('result is:',result.rows)
-    res.send(result.rows)
-   })
-   .catch((error) =>{
-    console.log('error fetching items', error)
-    res.sendStatus(500)
-   })
-});
-
-router.get('/fetchunapproved',rejectUnauthenticated, (req, res) => {
-  // GET route code here
+  console.log('in fetch unap')
   
   console.log('in fetch Unapproved',req.body);
   const sqlText = `
@@ -69,6 +56,25 @@ router.get('/fetchunapproved',rejectUnauthenticated, (req, res) => {
    })
 });
 
+router.get('/:id',rejectUnauthenticated, (req, res) => {
+  console.log('in get by id', req.params.id)
+  // GET route code here
+  const sqlText = `
+  SELECT*
+  FROM "request"
+  WHERE "user_id" = $1
+  `;
+  pool.query(sqlText,[req.user.id])
+   .then((result) =>{
+    // console.log('result is:',result.rows)
+    res.send(result.rows)
+   })
+   .catch((error) =>{
+    console.log('error fetching items', error)
+    res.sendStatus(500)
+   })
+});
+
 
 /**
  * POST route template
@@ -78,7 +84,7 @@ router.get('/fetchunapproved',rejectUnauthenticated, (req, res) => {
   console.log("req.body is:",req.body)
   const sqlText = `
   INSERT INTO "request"
-  ("user_id","pickup_location","destination","date/time","car_type")
+  ("user_id","pickup_location","destination","date_time","car_type")
   VALUES
   ($1,$2,$3,$4,$5);
   `;

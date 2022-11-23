@@ -3,6 +3,8 @@ import LogOutButton from '../LogOutButton/LogOutButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
+import * as ReactBootStrap from 'react-bootstrap';
+import Button from 'react-bootstrap/Button'
 
 import './UserPage.css';
 
@@ -22,7 +24,9 @@ function UserPage() {
     dispatch({ type: 'FETCH_USER_REQUESTS', payload: user.id });
   }, []);
 
-
+  const cancelBtn = () =>{
+    console.log('test')
+  }
   console.log('load appt', appt)
   return (
     <div className="container">
@@ -32,7 +36,7 @@ function UserPage() {
       <section>
         {appt.map(appointment => {
           return (
-            <table className='styled-table '>
+            <table key={appointment.id} className='styled-table '>
               <thead>
                 <tr>
                   <th scope="col">Date/Time</th>
@@ -40,26 +44,22 @@ function UserPage() {
                   <th scope="col">Destination</th>
                   <th scope="col">Vehicle type</th>
                   <th scope="col">Status</th>
-                  <th>Request Status</th>
+                  <th>Cancel Appointment</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td scope="row">{appointment.date_time}</td>
+                  <td scope="row">{appointment.date_time}
+                  </td>
                   <td>{appointment.pickup_location}</td>
                   <td scope="row">{appointment.destination}</td>
                   <td>{appointment.car_type}</td>
                   <td>{appointment.request_status}</td>
 
                   <td>
-                    <div class="dropdown">
-                      <button onclick="myFunction()" class="dropbtn">Change Status</button>
-                      <div id="myDropdown" class="dropdown-content">
-                        <a href="#">Link 1</a>
-                        <a href="#">Link 2</a>
-                        <a href="#">Link 3</a>
-                      </div>
-                    </div>
+                    <Button onClick={cancelBtn}>
+                      <i class="bi-trash">Cancel Request</i>
+                    </Button>
                   </td>
                 </tr>
               </tbody>
