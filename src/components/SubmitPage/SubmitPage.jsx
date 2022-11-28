@@ -1,30 +1,99 @@
 import { Box } from "@mui/system";
+import {useEffect, useState} from 'react';
 // import InfoPage from "../ApptPage/ApptPage";
+import { positions } from '@mui/system';
+
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import { useJsApiLoader, GoogleMap, Marker, Autocomplete, DirectionsRenderer, } from '@react-google-maps/api'
+import requestForm from "../../redux/reducers/requestFrom.reducer";
+import './SubmitPage.css'
+import swal from 'sweetalert2';
 function SubmitPage() {
-    const center = { lat: 44.977540, lng: -93.263643 }
+    const libraries = ['places']
     const dispatch = useDispatch();
+
+    const { isLoaded } = useJsApiLoader({
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+        libraries: libraries,
+      })
+
+    
     const history = useHistory();
     const appointment = useSelector((store) => store.requestForm);
      console.log('appointment review:',appointment);
+    //  const center = { lat: 44.977540, lng: -93.263643 }
 
+
+     const [map, setMap] = useState(null);
+     const [directionsResponse, setDirectionsResponse] = useState(null)
+
+     const distance = directionsResponse && directionsResponse.routes[0].legs[0].distance.text;
+     const duration = directionsResponse && directionsResponse.routes[0].legs[0].duration.text;
+
+  
     // const appointment = appointment.results;
-console.log(appointment);
+    console.log(appointment);
+    console.log('results')
+
+    useEffect(() => {
+        calculateRoute();
+    }, [appointment]);
+
+    async function calculateRoute() {
+
+        const directionsService = new google.maps.DirectionsService()
+        const results = await directionsService.route({
+            origin: appointment.pickUp,
+            destination: appointment.dropOff,
+            travelMode: google.maps.TravelMode.DRIVING,
+        })
+
+        setDirectionsResponse(results);
+    }
+
+
+
         
 
         const submitRequest = () =>{
-            dispatch({
-                type: 'ADD_REQUEST',
-                payload: appointment
-            })
+
+            swal.fire({
+                title:'Send Request?',
+                showCancelButton: true,
+                confirmButtonText: 'Yes!',
+                denyButtonText: `Cancel`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  swal.fire('Request sent!', '', 'success')
+                   //Post to database
+    
+                    //Clearing new order on click
+                    dispatch({
+                        type: 'ADD_REQUEST',
+                        payload: appointment
+                    });
+    
+                    //fetch users updated info
+                    // dispatch({ type: 'FETCH_USER_REQUESTS', payload: user.id });
+    
+      
+              //Navigating back to home page
+              history.push('/user');
+                } else if (result.isDenied) {
+                  swal.fire('Checkout not complete!', '', 'info')
+                }
+              })
+            
             history.push('/')
         }
+
+       
     return (
-        <>
+        <div className="container">
+            <div className="confirm-container">
             <h2>Confirm Appointment</h2>
             <ul>
                 <li>Date/Time: {appointment.dateTime}</li>
@@ -35,29 +104,29 @@ console.log(appointment);
                 <br />
                 <li>Vehicle Choice: {appointment.car}</li>
                 <br />
-                <li>Distance: {appointment.distance}</li>
+                <li>Distance: {distance}</li>
                 <br />
-                <li>Duration: {appointment.duration}</li>
+                <li>Duration: {duration}</li>
             </ul>
             <Button onClick={submitRequest}>Submit</Button>
-            {/* <div className='calculation'>
-                <h2>Distance: {distance} </h2>
-                <h2>Duration: {duration} </h2>
-            </div> */}
+            </div>
+            
             <Box
                 sx={{
-                    position: 'absolute',
-                    right: '0',
-                    width: "50%",
-                    height: "100%",
-                    color: "green",
+                    mx: 'auto',
+                    position:'fixed',
+                    left:'40%',
+                    top:'8.5%',
+                    width: "90%",
+                    height: "100%"
+
                 }}
             >
+                {isLoaded && 
                 <GoogleMap
-                    className="map"
-                    center={center}
-                    defaultZoom={15}
-                    mapContainerStyle={{ width: '90%', height: '40%', display: 'flex' }}
+                    // center={center}
+                    zoom={10}
+                    mapContainerStyle={{ width: '70%', height: '90%' }}
                     options={{
                         zoomControl: false,
                         streetViewControl: false,
@@ -66,13 +135,15 @@ console.log(appointment);
                     }}
                     onLoad={map => setMap(map)}
                 >
-                    <Marker position={center} />
-                    {appointment.directionsResponse && (
-                        <DirectionsRenderer directions={appointment.directionsResponse} />
+                    <Marker 
+                    // position={center} 
+                    />
+                    {directionsResponse && (
+                        <DirectionsRenderer directions={directionsResponse} />
                     )}
-                </GoogleMap>
+                </GoogleMap>}
             </Box>
-        </>
+        </div>
 
     )
 }

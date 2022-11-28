@@ -31,7 +31,6 @@ function UserPage() {
   return (
     <div className="container">
       <h2>Welcome, {user.username}!</h2>
-      <p>Your ID is: {user.id}</p>
       <h2>upcoming appointments</h2>
       <section>
         {appt.map(appointment => {
@@ -49,17 +48,16 @@ function UserPage() {
               </thead>
               <tbody>
                 <tr>
-                  <td scope="row">{appointment.date_time}
-                  </td>
+                  <td scope="row">{new Date(appointment.date_time).toLocaleString()}</td>
                   <td>{appointment.pickup_location}</td>
                   <td scope="row">{appointment.destination}</td>
                   <td>{appointment.car_type}</td>
                   <td>{appointment.request_status}</td>
 
                   <td>
-                    <Button onClick={cancelBtn}>
-                      <i class="bi-trash">Cancel Request</i>
-                    </Button>
+                    <button className='button-24' onClick={cancelBtn}>
+                      <i class="bi-trash">Cancel</i>
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -71,10 +69,10 @@ function UserPage() {
       </section>
 
 
-      <button onClick={newAppt}>new request</button>
+      <button className='button-24' onClick={newAppt}>new request</button>
       <br />
       <br />
-      <LogOutButton className="btn" />
+      <LogOutButton className="button-24" />
     </div>
 
   );

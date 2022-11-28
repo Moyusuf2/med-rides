@@ -52,7 +52,7 @@ const deleteRequest = () =>{
               <tbody>
                 <tr>
                   <td scope="row">{appointment.user_id}</td>
-                  <td scope="row">{appointment.date_time}</td>
+                  <td scope="row">{new Date(appointment.date_time).toLocaleString()}</td>
                   <td>{appointment.pickup_location}</td>
                   <td scope="row">{appointment.destination}</td>
                   <td>{appointment.car_type}</td>

@@ -20,6 +20,7 @@ import { useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 const libraries = ['places']
+import './AppPage.css';
 
 
 // This is one of our simplest components
@@ -47,59 +48,6 @@ function InfoPage() {
   const [dateTime, setDateTime] = useState('');
   const [car, setCar] = useState('');
 
-  async function calculateRoute() {
-    if (originRef.current.value === '' || destinationRef.current.value === '') {
-      return
-    }
-    // eslint-disable-next-line no-undef
-    const directionsService = new google.maps.DirectionsService()
-    const results = await directionsService.route({
-      origin: originRef.current.value,
-      destination: destinationRef.current.value,
-      // eslint-disable-next-line no-undef
-      travelMode: google.maps.TravelMode.DRIVING,
-    })
-
-
-    setDirectionsResponse(results)
-    setDistance(results.routes[0].legs[0].distance.text)
-    setDuration(results.routes[0].legs[0].duration.text)
-  }
-
-
-  const requestForm = {
-    pickUp,
-    dropOff,
-    dateTime,
-    car,
-    distance,
-    duration,
-    directionsResponse,
-    map,
-    setMap
-
-  }
-
-  function submitForm() {
-    console.log('request form', requestForm)
-
-    calculateRoute();
-    dispatch({
-
-      type: "SET_FORM",
-      payload: requestForm
-    })
-    history.push('/submit')
-  }
-
-
-
-
-
-
-
-
-
   /** @type React.MutableRefObject<HTMLInputElement> */
   const originRef = useRef()
   /** @type React.MutableRefObject<HTMLInputElement> */
@@ -108,11 +56,40 @@ function InfoPage() {
   if (!isLoaded) {
     return (
       <FaSkullCrossbones />
-
-
     )
   }
+  const requestForm = {
+    pickUp,
+    dropOff,
+    dateTime,
+    car,
+  }
 
+  async function calculateRoute() {
+
+    // console.log('pickup, dropOff', pickUp, dropOff)
+    // // eslint-disable-next-line no-undef
+    // const directionsService = new google.maps.DirectionsService()
+    // const results = await directionsService.route({
+    //   origin: pickUp,
+    //   destination: dropOff,
+    //   // eslint-disable-next-line no-undef
+    //   travelMode: google.maps.TravelMode.DRIVING,
+    // })
+
+
+    // setDirectionsResponse(results)
+    // console.log('results:',results)
+    // setDistance(results.routes[0].legs[0].distance.text)
+    // setDuration(results.routes[0].legs[0].duration.text)
+
+    dispatch({
+
+      type: "SET_FORM",
+      payload: requestForm
+    })
+    history.push('/submit')
+  }
 
   const handlePickUp = evt => {
     setPickUp(evt.target.value);
@@ -139,72 +116,56 @@ function InfoPage() {
   return (
     <div className='container'>
       <h2>New Request</h2>
-      <Box
-        sx={{
-          position: 'absolute',
-          right: '0',
-          width: "50%",
-          height: "100%",
-          color: "green",
-        }}
-      >
-        <GoogleMap
-          className="map"
-          center={center}
-          defaultZoom={15}
-          mapContainerStyle={{ width: '90%', height: '40%', display: 'flex' }}
-          options={{
-            zoomControl: false,
-            streetViewControl: false,
-            mapTypeControl: false,
-            fullscreenControl: false,
-          }}
-          onLoad={map => setMap(map)}
-        >
-          <Marker position={center} />
-          {directionsResponse && (
-            <DirectionsRenderer directions={directionsResponse} />
-          )}
-        </GoogleMap>
-      </Box>
+      <br />
 
-
-
-
-      <div className='formInput'>
-        <div className='origin'>
-          {/* <Autocomplete
-          > */}
-            <input type='text' placeholder='Origin'
-              value={pickUp}
-              onChange={handlePickUp}
-
-              ref={originRef} />
-          {/* </Autocomplete> */}
+      <div className='"input-container"'>
+        {/* <div className='origin'>
+          <Autocomplete
+          >
+          <input type='text' placeholder='Origin'
+            value={pickUp}
+            onChange={handlePickUp}
+            ref={originRef}
+          />
+          </Autocomplete>
+        </div> */}
+        <div class="input-container">
+          <input type="text" id="origin" placeholder="Enter your pickup location"
+            value={pickUp}
+            onChange={handlePickUp}
+            ref={originRef}
+          />
+          <label class="label" for="origin">Origin</label>
         </div>
-        <FaLocationArrow
-          aria-label='center'
-          onClick={() => {
-            map.panTo(center)
-            map.setZoom(15)
-          }} />
-        <div className='destination'>
-          {/* <Autocomplete
+        <div class="input-container">
+          <input type="text" id="destination" placeholder="Enter your destination" 
+          onChange={handleDropOff}
+          value={dropOff}
+          ref={destinationRef}
+          />
+          <label class="label" for="destination">Destination</label>
+        </div>
+        {/* <div className='destination'>
+          <Autocomplete
             onChange={handleDropOff}
             value={dropOff}
-          > */}
-            <input
-              onChange={handleDropOff}
-              value={dropOff}
-              type='text'
-              placeholder='Destination'
-              ref={destinationRef}
-            />
-          {/* </Autocomplete> */}
-        </div>
+          >
+          <input
+
+            onChange={handleDropOff}
+            value={dropOff}
+            ref={destinationRef}
+            type='text'
+            placeholder='Destination'
+          />
+          </Autocomplete>
+        </div> */}
 
         <div>
-          <input type="datetime-local"
+          <input 
+            className='calendar'
+            type="datetime-local"
+            required
             onChange={handleDateTime}
             value={dateTime}
           />
@@ -222,38 +183,35 @@ function InfoPage() {
         {/* <h2>Distance: {distance} </h2>
         <h2>Duration: {duration} </h2> */}
       </div>
-      <div className='carsInfo' class="d-flex align-items-stretch">
+      <div className="carsInfo">
         <Card style={{ width: '18rem' }}>
-          <Card.Img variant="top" src="images/Minivan.jpeg" />
+          <img variant="top" src="images/minivan.jpeg" />
           <Card.Body>
-            <Card.Title>Card Title</Card.Title>
+            <Card.Title>Minivan</Card.Title>
             <Card.Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
+              Wheelchair accessible Gurney van for patients with Physical constrains
             </Card.Text>
-            <Button variant="primary" onClick={(event) => setCar('Minivan')}>Minivan</Button>
+            <Button variant="primary" onClick={(event) => setCar('Minivan')}>SELECT</Button>
+          </Card.Body>
+        </Card>
+        <Card style={{ width: '18rem', height: '18rem' }}>
+          <img variant="top" src="images/gurley_van.jpeg" />
+          <Card.Body>
+            <Card.Title>GURNEY VAN</Card.Title>
+            <Card.Text>
+              Wheelchair accessible Gurney van for patients with Physical constrains
+            </Card.Text>
+            <Button variant="primary" onClick={(event) => setCar('Gurney Van')}>SELECT</Button>
           </Card.Body>
         </Card>
         <Card style={{ width: '18rem' }}>
-          <Card.Img variant="top" src="images/gurley_van.jpeg" />
+          <img variant="top" src="images/sedan.jpeg" />
           <Card.Body>
-            <Card.Title>Card Title</Card.Title>
+            <Card.Title>SEDAN</Card.Title>
             <Card.Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
+              Common Carrier Transportation for patients without Physical constrains
             </Card.Text>
-            <Button variant="primary" onClick={(event) => setCar('Gurney Van')}>Gurney Van</Button>
-          </Card.Body>
-        </Card>
-        <Card style={{ width: '18rem' }}>
-          <Card.Img variant="top" src="images/newSedan.jpeg" />
-          <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </Card.Text>
-            <Button variant="primary" onClick={(event) => setCar('Sedan')}>Sedan</Button>
+            <Button variant="primary" onClick={(event) => setCar('Sedan')}>SELECT</Button>
           </Card.Body>
         </Card>
 
@@ -265,7 +223,7 @@ function InfoPage() {
       <br />
       <br />
 
-      <Button onClick={submitForm}>Review Request</Button>
+      <Button onClick={calculateRoute}>Review Request</Button>
 
     </div>
   );
