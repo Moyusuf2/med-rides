@@ -1,0 +1,28 @@
+     /* background-image: url('/public/images/loginPic.png') !important; */
+ 
+
+
+  .myimage {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    width:100%;
+    position:absolute;
+    display:inline;
+    z-index:-1;
+    
+  }
+
+  /* .myimage::after {
+    content: url('/public/images/loginPic.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    display:inline;
+    z-index:-1;
+  } */

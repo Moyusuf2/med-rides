@@ -5,6 +5,8 @@ import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import './AdminPage.css';
+import swal from 'sweetalert2';
+
 
 function AdminPage() {
   // this component doesn't do much to start, just renders some user reducer info to the DOM
@@ -23,21 +25,21 @@ function AdminPage() {
   console.log('load appt', appt)
 
 
-const deleteRequest = () =>{
-  console.log('in delete')
+  const deleteRequest = () => {
+    console.log('in delete')
 
-    
-}
+
+  }
   return (
     <div className="container">
-        <h2>WELCOME TO ADMIN PAGE</h2>
+      <h2>WELCOME TO ADMIN PAGE</h2>
       {/* <h2>Welcome, {user.username}!</h2> */}
-      <p>Your ID is: {user.id}</p>
-      <h2>upcoming appointments</h2>
+      <br />
+      <h2>List of approved appointments</h2>
       <section>
         {appt.map(appointment => {
           return (
-            <table key= {appointment.id} className='styled-table '>
+            <table key={appointment.id} className='styled-table '>
               <thead>
                 <tr>
                   <th scope="col">user</th>
@@ -46,7 +48,7 @@ const deleteRequest = () =>{
                   <th scope="col">Destination</th>
                   <th scope="col">Vehicle type</th>
                   <th scope="col">Status</th>
-                  <th>Request Status</th>
+                  <th>Remove Appointment</th>
                 </tr>
               </thead>
               <tbody>
@@ -57,15 +59,34 @@ const deleteRequest = () =>{
                   <td scope="row">{appointment.destination}</td>
                   <td>{appointment.car_type}</td>
                   <td>{appointment.request_status}</td>
-                  <button className='button-24' onClick={() =>{
-                    dispatch({
-                      type: 'DELETE_REQUEST',
-                      payload: appointment
+                  <button className='button-24' onClick={() => {
+                    swal.fire({
+                      title: 'Delete Request?',
+                      showCancelButton: true,
+                      confirmButtonText: 'Yes!',
+                      denyButtonText: `Cancel`,
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        swal.fire('Request deleted!', '', 'success')
+                        //Post to database
+
+                        //Clearing new order on click
+                        dispatch({
+                          type: 'DELETE_REQUEST',
+                          payload: appointment
+                        })
+
+                        //fetch users updated info
+
+                        dispatch({ type: 'FETCH_ALL_REQUESTS' })
+
+                      
+                        
+                      } else if (result.isDenied) {
+                        swal.fire('Checkout not complete!', '', 'info')
+                      }
                     })
                   }}>Delete</button>
-                  <td>
-                    
-                  </td>
                 </tr>
               </tbody>
             </table>
@@ -74,8 +95,6 @@ const deleteRequest = () =>{
           );
         })}
       </section>
-
-      <button onClick={newAppt}>new request</button>
       <br />
       <br />
       <LogOutButton className="btn" />

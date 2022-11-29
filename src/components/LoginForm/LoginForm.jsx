@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {useSelector} from 'react-redux';
 
+
 function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -25,6 +26,7 @@ function LoginForm() {
   }; // end login
 
   return (
+    <div className='container'>
     <form className="formPanel" onSubmit={login}>
       <h2>Login</h2>
       {errors.loginMessage && (
@@ -36,6 +38,7 @@ function LoginForm() {
         <label htmlFor="username">
           Username:
           <input
+          autocomplete="off"
             type="text"
             name="username"
             required
@@ -48,6 +51,7 @@ function LoginForm() {
         <label htmlFor="password">
           Password:
           <input
+            autocomplete="off"
             type="password"
             name="password"
             required
@@ -60,6 +64,7 @@ function LoginForm() {
         <input className="button-24" type="submit" name="submit" value="Log In" />
       </div>
     </form>
+    </div>
   );
 }
 

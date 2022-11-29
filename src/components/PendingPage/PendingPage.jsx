@@ -18,7 +18,7 @@ function PendingPage(){
       <section>
         {pending.map(appointment => {
           return (
-            <table className='styled-table '>
+            <table key={appointment.id} className='styled-table '>
               <thead>
                 <tr>
                 <th scope="col">request id</th>

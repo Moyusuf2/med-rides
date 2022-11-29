@@ -130,7 +130,8 @@ function InfoPage() {
           </Autocomplete>
         </div> */}
         <div class="input-container">
-          <input type="text" id="origin" placeholder="Enter your pickup location"
+          
+          <input autocomplete="off" type="text" id="origin" placeholder="Enter your pickup location"
             value={pickUp}
             onChange={handlePickUp}
             ref={originRef}
@@ -138,7 +139,7 @@ function InfoPage() {
           <label class="label" for="origin">Origin</label>
         </div>
         <div class="input-container">
-          <input type="text" id="destination" placeholder="Enter your destination" 
+          <input autocomplete="off" type="text" id="destination" placeholder="Enter your destination" 
           onChange={handleDropOff}
           value={dropOff}
           ref={destinationRef}
@@ -176,7 +177,7 @@ function InfoPage() {
             Calculate Route
           </Button> */}
 
-          <Button onClick={clearRoute} placeholder="clear">Clear inputs</Button>
+          <button className='button-24' onClick={clearRoute} placeholder="clear">Clear inputs</button>
         </div>
       </div>
       <div className='calculation'>
@@ -189,29 +190,29 @@ function InfoPage() {
           <Card.Body>
             <Card.Title>Minivan</Card.Title>
             <Card.Text>
-              Wheelchair accessible Gurney van for patients with Physical constrains
+              Side-entry handicap van conversion comes standard with a powered ramp.
             </Card.Text>
-            <Button variant="primary" onClick={(event) => setCar('Minivan')}>SELECT</Button>
+            <button className='button-24' variant="primary" onClick={(event) => setCar('Minivan')}>SELECT</button>
           </Card.Body>
         </Card>
-        <Card style={{ width: '18rem', height: '18rem' }}>
-          <img variant="top" src="images/gurley_van.jpeg" />
+        <Card style={{ width: '18rem', height: '300px'}}>
+          <img variant="top" src="images/newVan.png" />
           <Card.Body>
             <Card.Title>GURNEY VAN</Card.Title>
             <Card.Text>
               Wheelchair accessible Gurney van for patients with Physical constrains
             </Card.Text>
-            <Button variant="primary" onClick={(event) => setCar('Gurney Van')}>SELECT</Button>
+            <button className='button-24' variant="primary" onClick={(event) => setCar('Gurney Van')}>SELECT</button>
           </Card.Body>
         </Card>
         <Card style={{ width: '18rem' }}>
-          <img variant="top" src="images/sedan.jpeg" />
+          <img variant="top" src="images/sedan.png" />
           <Card.Body>
             <Card.Title>SEDAN</Card.Title>
             <Card.Text>
               Common Carrier Transportation for patients without Physical constrains
             </Card.Text>
-            <Button variant="primary" onClick={(event) => setCar('Sedan')}>SELECT</Button>
+            <button className='button-24' variant="primary" onClick={(event) => setCar('Sedan')}>SELECT</button>
           </Card.Body>
         </Card>
 
@@ -223,7 +224,7 @@ function InfoPage() {
       <br />
       <br />
 
-      <Button onClick={calculateRoute}>Review Request</Button>
+      <button className='button-24' onClick={calculateRoute}>Next</button>
 
     </div>
   );

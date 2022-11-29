@@ -63,6 +63,7 @@ router.get('/:id',rejectUnauthenticated, (req, res) => {
   SELECT*
   FROM "request"
   WHERE "user_id" = $1
+  ORDER BY "date_time" ASC;
   `;
   pool.query(sqlText,[req.user.id])
    .then((result) =>{
@@ -105,6 +106,22 @@ router.put('/:id',rejectUnauthenticated, (req,res) =>{
   const sqlText =`
   UPDATE "request"
  SET "request_status"= 'APPROVED'
+ WHERE "id" = $1;
+  `;
+  pool.query(sqlText,[req.params.id])
+  .then((result) =>{
+    res.sendStatus(201)
+  })
+  .catch((error) =>{
+    console.log('error in /PUT', error)
+  })
+});
+
+router.put('/deny/:id',rejectUnauthenticated, (req,res) =>{
+  console.log('req.body is:',req.params.id)
+  const sqlText =`
+  UPDATE "request"
+ SET "request_status"= 'DENIED'
  WHERE "id" = $1;
   `;
   pool.query(sqlText,[req.params.id])
