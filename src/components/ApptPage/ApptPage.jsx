@@ -2,9 +2,7 @@ import React from 'react';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import { useSelector } from 'react-redux';
 import { Dispatch } from 'react';
-import { FaLocationArrow, FaTimes, FaSkullCrossbones } from 'react-icons/fa'
-import { useJsApiLoader, GoogleMap, Marker, Autocomplete, DirectionsRenderer, } from '@react-google-maps/api'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -19,45 +17,24 @@ import Select from '@mui/material/Select';
 import { useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-const libraries = ['places']
+import { KeyboardDatePicker } from "@material-ui/pickers";
 import './AppPage.css';
 
-
-// This is one of our simplest components
-// It doesn't have local state
-// It doesn't dispatch any redux actions or display any part of redux state
-// or even care what the redux state is
 
 function InfoPage() {
   // const [displayCar, setDisplayCar] = useState(true);
   const history = useHistory()
   const dispatch = useDispatch();
   // const user = useSelector((store) => store.user);
-  const center = { lat: 44.977540, lng: -93.263643 }
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: libraries,
-  })
+  
 
-  const [map, setMap] = useState(/** @type google.maps.Map */(null))
-  const [directionsResponse, setDirectionsResponse] = useState(null)
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
+
   const [pickUp, setPickUp] = useState('');
   const [dropOff, setDropOff] = useState('');
-  const [dateTime, setDateTime] = useState('');
+  const [dateTime, setDateTime] = useState(new Date());
   const [car, setCar] = useState('');
 
-  /** @type React.MutableRefObject<HTMLInputElement> */
-  const originRef = useRef()
-  /** @type React.MutableRefObject<HTMLInputElement> */
-  const destinationRef = useRef()
-
-  if (!isLoaded) {
-    return (
-      <FaSkullCrossbones />
-    )
-  }
+ 
   const requestForm = {
     pickUp,
     dropOff,
@@ -65,26 +42,8 @@ function InfoPage() {
     car,
   }
 
-  async function calculateRoute() {
-
-    // console.log('pickup, dropOff', pickUp, dropOff)
-    // // eslint-disable-next-line no-undef
-    // const directionsService = new google.maps.DirectionsService()
-    // const results = await directionsService.route({
-    //   origin: pickUp,
-    //   destination: dropOff,
-    //   // eslint-disable-next-line no-undef
-    //   travelMode: google.maps.TravelMode.DRIVING,
-    // })
-
-
-    // setDirectionsResponse(results)
-    // console.log('results:',results)
-    // setDistance(results.routes[0].legs[0].distance.text)
-    // setDuration(results.routes[0].legs[0].duration.text)
-
+  function saveRequest() {
     dispatch({
-
       type: "SET_FORM",
       payload: requestForm
     })
@@ -104,12 +63,11 @@ function InfoPage() {
     console.log('handle time and date', dateTime)
   }
 
-  function clearRoute() {
-    setDirectionsResponse(null)
-    setDistance('')
-    setDuration('')
-    originRef.current.value = ''
-    destinationRef.current.value = ''
+  function clearInputs() {
+    setDateTime('')
+    setCar('')
+    setPickUp('')
+    setDropOff('')
   }
 
 
@@ -119,22 +77,11 @@ function InfoPage() {
       <br />
 
       <div className='"input-container"'>
-        {/* <div className='origin'>
-          <Autocomplete
-          >
-          <input type='text' placeholder='Origin'
-            value={pickUp}
-            onChange={handlePickUp}
-            ref={originRef}
-          />
-          </Autocomplete>
-        </div> */}
         <div class="input-container">
           
           <input autocomplete="off" type="text" id="origin" placeholder="Enter your pickup location"
             value={pickUp}
             onChange={handlePickUp}
-            ref={originRef}
           />
           <label class="label" for="origin">Origin</label>
         </div>
@@ -142,26 +89,9 @@ function InfoPage() {
           <input autocomplete="off" type="text" id="destination" placeholder="Enter your destination" 
           onChange={handleDropOff}
           value={dropOff}
-          ref={destinationRef}
           />
           <label class="label" for="destination">Destination</label>
         </div>
-        {/* <div className='destination'>
-          <Autocomplete
-            onChange={handleDropOff}
-            value={dropOff}
-          >
-          <input
-
-            onChange={handleDropOff}
-            value={dropOff}
-            ref={destinationRef}
-            type='text'
-            placeholder='Destination'
-          />
-          </Autocomplete>
-        </div> */}
-
         <div>
           <input 
             className='calendar'
@@ -173,16 +103,8 @@ function InfoPage() {
         </div>
 
         <div>
-          {/* <Button type='submit' onClick={calculateRoute}>
-            Calculate Route
-          </Button> */}
-
-          <button className='button-24' onClick={clearRoute} placeholder="clear">Clear inputs</button>
+          <button className='button-24' onClick={clearInputs} placeholder="clear">Clear inputs</button>
         </div>
-      </div>
-      <div className='calculation'>
-        {/* <h2>Distance: {distance} </h2>
-        <h2>Duration: {duration} </h2> */}
       </div>
       <div className="carsInfo">
         <Card style={{ width: '18rem' }}>
@@ -215,17 +137,11 @@ function InfoPage() {
             <button className='button-24' variant="primary" onClick={(event) => setCar('Sedan')}>SELECT</button>
           </Card.Body>
         </Card>
-
-        {/* <button onClick={(event) => setCar('Sedan')}>Sedan</button>
-        <button onClick={(event) => setCar('Minivan')}>Minivan</button>
-        <button onClick={(event) => setCar('Gurney Van')}>Gurney Van</button> */}
-
       </div>
       <br />
       <br />
 
-      <button className='button-24' onClick={calculateRoute}>Next</button>
-
+      <button className='button-24' onClick={saveRequest}>Next</button>
     </div>
   );
 }

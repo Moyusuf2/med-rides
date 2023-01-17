@@ -1,37 +1,17 @@
-/* .container{
-display:flex;
-background-color: gray;
-
-
+:root{
+    --main-color: #5549F1;
+    --main-font: 'Open Sans', sans-serif;
 }
-
- .carsInfo {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-content: space-around;
-    justify-content: center;
-    align-items: baseline;
-    margin: auto;
-    margin: 20px;
-    box-shadow:0px 0px 5px black;
-}
-img{
-border-radius: 8px;
-} */
 .carsInfo{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    align-content: space-around;
-    justify-content: space-around;
     align-items: baseline;
     margin-top: 20px;
     box-shadow:0px 0px 5px black;
     padding-top: 5px;
   }
   
-
   .input-container * {
     box-sizing: border-box;
 }
@@ -45,21 +25,23 @@ border-radius: 8px;
     top: 15px;
     transition: .2s;
     z-index: 1;
-    color: rgb(0, 0, 0, .5);
+    color: rgba(0, 0, 0, .5);
     font-size: 1em;
     cursor: text;
+    font-family: var(--main-font);
 }
 .input-container input {
     padding: 0.8rem;
     width: 100%;
     height: 100%;
-    border: 2px solid rgb(0, 0, 0, .3);
-    background: rgb(0, 0, 0, 0);
+    border: 2px solid rgba(0, 0, 0, .3);
+    background: rgba(0, 0, 0, 0);
     outline: none;
     border-radius: 5px;
     font-size: 1em;
     transition: .3s;
-    color: rgb(0, 0, 0);
+    color: #000;
+    font-family: var(--main-font);
 }
 .input-container label:before {
     content: '';
@@ -73,23 +55,20 @@ border-radius: 8px;
 }
 .input-container input:not(:placeholder-shown),
 .input-container input:focus {
-    border: 2px solid #5549F1;
+    border: 2px solid var(--main-color);
 }
 .input-container input:not(:placeholder-shown) + label,
 .input-container input:focus + label {
     top: -10px;
-    color: #5549F1;
+    color: var(--main-color);
     font-size: 14px;
 }
 .input-container input::placeholder {
     font-size: 16px;
     opacity: 0;
     transition: .3s;
+    font-family: var(--main-font);
 }
 .input-container input:focus::placeholder {
     opacity: 1;
-}
-
-.calender{
-    
 }
