@@ -34,10 +34,6 @@ function SubmitPage() {
     const duration = directionsResponse && directionsResponse.routes[0].legs[0].duration.text;
 
 
-    // const appointment = appointment.results;
-    console.log(appointment);
-    console.log('results')
-
     useEffect(() => {
         calculateRoute();
     }, [appointment]);
