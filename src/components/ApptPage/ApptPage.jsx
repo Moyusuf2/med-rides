@@ -1,40 +1,17 @@
-import React from 'react';
-import LogOutButton from '../LogOutButton/LogOutButton';
-import { useSelector } from 'react-redux';
-import { Dispatch } from 'react';
-import { useState } from 'react'
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import CssBaseline from '@mui/material/CssBaseline';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
-// import Button from '@mui/material/Button'
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { useDispatch } from 'react-redux';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import { KeyboardDatePicker } from "@material-ui/pickers";
 import './AppPage.css';
 
-
 function InfoPage() {
-  // const [displayCar, setDisplayCar] = useState(true);
-  const history = useHistory()
+  const history = useHistory();
   const dispatch = useDispatch();
-  // const user = useSelector((store) => store.user);
-  
-
 
   const [pickUp, setPickUp] = useState('');
   const [dropOff, setDropOff] = useState('');
   const [dateTime, setDateTime] = useState(new Date());
   const [car, setCar] = useState('');
 
- 
   const requestForm = {
     pickUp,
     dropOff,
@@ -46,54 +23,62 @@ function InfoPage() {
     dispatch({
       type: "SET_FORM",
       payload: requestForm
-    })
-    history.push('/submit')
+    });
+    history.push('/submit');
   }
 
   const handlePickUp = evt => {
     setPickUp(evt.target.value);
-    console.log('handle pickup', pickUp)
+    console.log('handle pickup', pickUp);
   }
+
   const handleDropOff = evt => {
     setDropOff(evt.target.value);
-    console.log('handle dropOff', dropOff)
+    console.log('handle dropOff', dropOff);
   }
+
   const handleDateTime = evt => {
     setDateTime(evt.target.value);
-    console.log('handle time and date', dateTime)
+    console.log('handle time and date', dateTime);
   }
 
   function clearInputs() {
-    setDateTime('')
-    setCar('')
-    setPickUp('')
-    setDropOff('')
+    setDateTime('');
+    setCar('');
+    setPickUp('');
+    setDropOff('');
   }
-
 
   return (
     <div className='container'>
       <h2>New Request</h2>
       <br />
 
-      <div className='"input-container"'>
-        <div class="input-container">
-          
-          <input autocomplete="off" type="text" id="origin" placeholder="Enter your pickup location"
+      <div className='input-container'>
+        <div className="input-container">
+          <input
+            autoComplete="off"
+            type="text"
+            id="origin"
+            placeholder="Enter your pickup location"
             value={pickUp}
             onChange={handlePickUp}
           />
-          <label class="label" for="origin">Origin</label>
+          <label className="label" htmlFor="origin">Origin</label>
         </div>
-        <div class="input-container">
-          <input autocomplete="off" type="text" id="destination" placeholder="Enter your destination" 
-          onChange={handleDropOff}
-          value={dropOff}
+        <div className="input-container">
+          <input
+            autoComplete="off"
+            type="text"
+            id="destination"
+            placeholder="Enter your destination"
+            onChange={handleDropOff}
+            value={dropOff}
           />
-          <label class="label" for="destination">Destination</label>
+          <label className="label" htmlFor="destination">Destination</label>
         </div>
         <div>
-          <input 
+          <input
             className='calendar'
             type="datetime-local"
             required
@@ -107,36 +92,30 @@ function InfoPage() {
         </div>
       </div>
       <div className="carsInfo">
-        <Card style={{ width: '18rem' }}>
-          <img variant="top" src="images/minivan.jpeg" />
-          <Card.Body>
-            <Card.Title>Minivan</Card.Title>
-            <Card.Text>
-              Side-entry handicap van conversion comes standard with a powered ramp.
-            </Card.Text>
-            <button className='button-24' variant="primary" onClick={(event) => setCar('Minivan')}>SELECT</button>
-          </Card.Body>
-        </Card>
-        <Card style={{ width: '18rem', height: '300px'}}>
-          <img variant="top" src="images/newVan.png" />
-          <Card.Body>
-            <Card.Title>GURNEY VAN</Card.Title>
-            <Card.Text>
-              Wheelchair accessible Gurney van for patients with Physical constrains
-            </Card.Text>
-            <button className='button-24' variant="primary" onClick={(event) => setCar('Gurney Van')}>SELECT</button>
-          </Card.Body>
-        </Card>
-        <Card style={{ width: '18rem' }}>
-          <img variant="top" src="images/sedan.png" />
-          <Card.Body>
-            <Card.Title>SEDAN</Card.Title>
-            <Card.Text>
-              Common Carrier Transportation for patients without Physical constrains
-            </Card.Text>
-            <button className='button-24' variant="primary" onClick={(event) => setCar('Sedan')}>SELECT</button>
-          </Card.Body>
-        </Card>
+        <div className="card">
+          <img className="card-image" src="images/minivan.jpeg" alt="Minivan" />
+          <div className="card-body">
+            <h5 className="card-title">Minivan</h5>
+            <p className="card-text">Side-entry handicap van conversion comes standard with a powered ramp.</p>
+            <button className='button-24' onClick={() => setCar('Minivan')}>SELECT</button>
+          </div>
+        </div>
+        <div className="card">
+          <img className="card-image" src="images/newVan.png" alt="Gurney Van" />
+          <div className="card-body">
+            <h5 className="card-title">Gurney Van</h5>
+            <p className="card-text">Wheelchair accessible Gurney van for patients with Physical constrains</p>
+            <button className='button-24' onClick={() => setCar('Gurney Van')}>SELECT</button>
+          </div>
+        </div>
+        <div className="card">
+          <img className="card-image" src="images/sedan.png" alt="Sedan" />
+          <div className="card-body">
+            <h5 className="card-title">Sedan</h5>
+            <p className="card-text">Common Carrier Transportation for patients without Physical constrains</p>
+            <button className='button-24' onClick={() => setCar('Sedan')}>SELECT</button>
+          </div>
+        </div>
       </div>
       <br />
       <br />
